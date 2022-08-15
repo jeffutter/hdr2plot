@@ -1,0 +1,29 @@
+[package]
+name = "hdr2plot"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nom = "7"
+plotters = { version = "0.3", default_features = false, features = [ "svg_backend", "bitmap_backend", "bitmap_encoder", "chrono", "ttf", "image", "all_series", "all_elements"] }
+csaps = "0.3"
+itertools = "0.10"
+clap = { version = "3", features = [ "derive" ] }
+self_update = { version = "0.30", default_features = false, features = [ "rustls", "archive-tar", "compression-flate2" ] }
+flate2 = "1"
+base64 = "0.13"
+
+[dev-dependencies]
+pretty_assertions = "1"
+
+[profile.dev]
+# Disabling debug info speeds up builds a bunch,
+# and we don't rely on it for debugging that much.
+debug = 0
+
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1 
