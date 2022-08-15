@@ -66,6 +66,7 @@ impl HGRM {
         self
     }
 
+    #[allow(dead_code)]
     pub fn add_percentile(
         mut self,
         value: f64,
@@ -82,18 +83,6 @@ impl HGRM {
         self
     }
 
-    pub fn min_pct(&self) -> f64 {
-        self.percentiles
-            .iter()
-            .fold(f64::MAX, |a, b| a.min(b.percentile))
-    }
-
-    pub fn max_pct(&self) -> f64 {
-        self.percentiles
-            .iter()
-            .fold(f64::MIN, |a, b| a.max(b.percentile))
-    }
-
     pub fn max_latency(&self) -> f64 {
         self.percentiles
             .iter()
@@ -107,14 +96,6 @@ pub struct HGRMs(Vec<HGRM>);
 impl HGRMs {
     pub fn new(hgrms: Vec<HGRM>) -> Self {
         Self(hgrms)
-    }
-
-    pub fn min_pct(&self) -> f64 {
-        self.0.iter().fold(f64::MAX, |a, b| a.min(b.min_pct()))
-    }
-
-    pub fn max_pct(&self) -> f64 {
-        self.0.iter().fold(f64::MIN, |a, b| a.max(b.max_pct()))
     }
 
     pub fn max_latency(&self) -> f64 {

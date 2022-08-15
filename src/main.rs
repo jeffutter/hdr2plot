@@ -66,7 +66,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let filename = &args.filename.unwrap();
         let renderer = Renderer::new(args.renderer, parsed, filename);
 
-        renderer.render()
+        renderer.render()?;
+
+        println!("Generated {}", filename);
+
+        Ok(())
     } else {
         println!("Unable to parse data!");
         Ok(())

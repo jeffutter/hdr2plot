@@ -25,13 +25,17 @@ impl<'a> Line<'a> {
             .x_label_area_size(35)
             .y_label_area_size(60)
             .build_cartesian_2d(
-                self.histograms.min_pct()..self.histograms.max_pct(),
+                (0f64..1f64)
+                    .log_scale()
+                    .zero_point(1.0)
+                    .with_key_points(vec![0.9999, 0.999, 0.99, 0.95, 0.9, 0.5, 0.1]),
                 0f64..self.histograms.max_latency(),
             )?;
 
         chart
             .configure_mesh()
             .x_desc("Percentile")
+            .x_label_formatter(&|x| format!("{}%", *x * 100.0))
             .y_desc("Milliseconds")
             .draw()?;
 
@@ -41,7 +45,8 @@ impl<'a> Line<'a> {
             let mut data = histogram
                 .percentiles
                 .iter()
-                .map(|percentile| (percentile.percentile * 100.0, percentile.value));
+                .filter(|percentile| percentile.percentile < 1.0f64)
+                .map(|percentile| (percentile.percentile, percentile.value));
 
             let label = match &histogram.name {
                 Some(filename) => {
