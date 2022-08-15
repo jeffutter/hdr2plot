@@ -16,7 +16,7 @@ impl<'a> Line<'a> {
     }
 
     pub fn render(&self) -> Result<(), Box<dyn std::error::Error>> {
-        let size = (960, 720);
+        let size = (960, 480);
         let root = SVGBackend::new(self.filename, size).into_drawing_area();
 
         let mut chart = ChartBuilder::on(&root)
@@ -37,6 +37,7 @@ impl<'a> Line<'a> {
             .x_desc("Percentile")
             .x_label_formatter(&|x| format!("{}%", *x * 100.0))
             .y_desc("Milliseconds")
+            .y_max_light_lines(5)
             .draw()?;
 
         for (idx, histogram) in self.histograms.iter().enumerate() {
