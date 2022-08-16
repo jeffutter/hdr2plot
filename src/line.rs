@@ -29,7 +29,7 @@ impl<'a> Line<'a> {
                     .log_scale()
                     .zero_point(1.0)
                     .with_key_points(vec![0.9999, 0.999, 0.99, 0.95, 0.9, 0.5, 0.1]),
-                0f64..self.histograms.max_latency(),
+                0f64..(self.histograms.max_latency() / 1000f64),
             )?;
 
         chart
@@ -47,7 +47,7 @@ impl<'a> Line<'a> {
                 .percentiles
                 .iter()
                 .filter(|percentile| percentile.percentile < 1.0f64)
-                .map(|percentile| (percentile.percentile, percentile.value));
+                .map(|percentile| (percentile.percentile, percentile.value / 1000f64));
 
             let label = match &histogram.name {
                 Some(filename) => {

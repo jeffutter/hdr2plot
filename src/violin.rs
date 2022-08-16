@@ -22,7 +22,7 @@ impl<'a> Violin<'a> {
     pub fn render(&self) -> Result<(), Box<dyn std::error::Error>> {
         let histograms = &self.histograms;
         let filen = self.filename;
-        let x_range = 0.0..histograms.max_latency();
+        let x_range = 0.0..(histograms.max_latency() / 1000f64);
         let y_range = -0.5..histograms.len() as f64 - 0.5;
 
         let size = (960, 300 + (18 * histograms.len() as u32));
@@ -81,7 +81,7 @@ impl<'a> Violin<'a> {
                     let count_diff = (percentile.total_count as f64) - *prev;
                     *prev = percentile.total_count as f64;
 
-                    Some((percentile.value, count_diff))
+                    Some((percentile.value / 1000f64, count_diff))
                 })
                 .group_by(|(x, _y)| *x)
                 .into_iter()
